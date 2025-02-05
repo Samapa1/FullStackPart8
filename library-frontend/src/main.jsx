@@ -11,6 +11,7 @@ import {
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
   cache: new InMemoryCache(),
+  connectToDevTools: true
 })
 
 ReactDOM.createRoot(document.getElementById("root")).render(
