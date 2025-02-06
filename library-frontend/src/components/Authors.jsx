@@ -2,31 +2,18 @@ import { useState } from 'react'
 import { gql, useMutation } from '@apollo/client'
 import Select from 'react-select';
 
-const EDIT_AUTHOR = gql`
-  mutation editAuthor($name: String!, $born: Int!) {
-    editAuthor(
-      name: $name,
-      setBornTo: $born
-    ) {
-      name,
-      born,
-      id
-    }
-  }
-`
+import { EDIT_AUTHOR } from '../queries';
 
 const Authors = (props) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
-  // const [selectedAuthor, setSelectedAuthor] = useState(null);
 
   const [ editAuthor ] = useMutation(EDIT_AUTHOR)
 
   if (!props.show) {
     return null
   }
-  console.log(name)
-  // const authors = []
+
   const authors = props.authors
   const options = authors.map( (author) => { return {
     value: author.name,
@@ -74,11 +61,6 @@ const Authors = (props) => {
             }}
             options={options}
           />
-            {/* name
-            <input
-              value={name}
-              onChange={({ target }) => setName(target.value)}
-            /> */}
             </div>
             <div>
             born
