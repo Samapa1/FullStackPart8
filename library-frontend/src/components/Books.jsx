@@ -2,25 +2,32 @@ import { useState } from "react";
 import { Fragment } from "react";
 
 const Books = (props) => {
-  const [genre, setGenre] = useState("all")
+  const books = props.books
+  const [genre, setGenre] = useState("all genres")
+  const [filteredBooks, setFilteredBooks] = useState(props.books)
+
   if (!props.show) {
     return null
   }
 
-  const books = props.books
-  console.log(books)
-  const combinedGenres = []
+  const combinedGenres = ["all genres"]
+      
+  books.forEach(book => book.genres.forEach(g => !combinedGenres.includes(g) ? combinedGenres.push(g) : undefined))
 
-  // books.map(book => book.genres.map(g => combinedGenres.push(g)))
-  books.map(book => book.genres.map(g => !combinedGenres.includes(g) ? combinedGenres.push(g) : undefined))
-  console.log(combinedGenres)
-  // const allGenres = combined
+  const selectGenre = (g) => {
+    setGenre(g)
 
-
-  // allGenres.forEach(g => combinedGenres.push(g))
-  // console.log(combinedGenres)
-  const selectGenre = () => {
-    console.log("selection")
+    if (g === "all genres") {
+      console.log(books)
+      setFilteredBooks(books)
+      console.log(filteredBooks)
+    }
+    else {
+      const filtered = books.filter(book => { return book.genres.includes(g)
+      })
+      setFilteredBooks(filtered)
+      console.log(genre)
+    }
   }
 
   return (
@@ -34,7 +41,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.map((b) => (
+          {filteredBooks.map((b) => (
             <tr key={b.title}>
               <td>{b.title}</td>
               <td>{b.author.name}</td>
@@ -45,10 +52,8 @@ const Books = (props) => {
       </table>
       {combinedGenres.map((g) => (
         <Fragment key = {g}>
-        {/* <div key = {g}> */}
-        <button onClick={() => selectGenre()}>{g}</button> 
+        <button onClick={() => selectGenre(g)}>{g}</button> 
         </Fragment>
-        // </div>
       ))}
     </div>
   )
