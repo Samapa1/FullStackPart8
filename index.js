@@ -190,20 +190,21 @@ const resolvers = {
     allBooks: async (root, args) => {
       if (args.author && args.genre){
         const author2 = await Author.find({name: args.author})
-        console.log(author2)
-        return Book.find({ author: author2, genres: args.genre }).populate({path: "author"})
+        const books = await Book.find({ author: author2, genres: args.genre }).populate({path: "author"})
+        return books
       }
       else if (args.author && !args.genre){
         const author2 = await Author.find({name: args.author})
-        console.log(author2)
-        return Book.find({ author: author2}).populate({path: "author"})
+        const books = await Book.find({ author: author2}).populate({path: "author"})
+        return books
       }
       else if (!args.author && args.genre) {
-        return Book.find({ genres: args.genre }).populate({path: "author"})
+        const books =  Book.find({ genres: args.genre }).populate({path: "author"})
+        return books
       }
       else {
         const books = await Book.find({}).populate({path: "author"})
-        console.log(JSON.stringify(books))
+        // console.log(JSON.stringify(books))
         return books
       }
       },
