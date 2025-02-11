@@ -22,12 +22,6 @@ const httpLink = createHttpLink({
   uri: 'http://localhost:4000',
 })
 
-// const client = new ApolloClient({
-//   uri: 'http://localhost:4000',
-//   cache: new InMemoryCache(),
-//   connectToDevTools: true
-// })
-
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink)

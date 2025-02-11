@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { Fragment } from "react";
+import { useQuery } from '@apollo/client'
+import { ALL_BOOKS } from "../queries";
 
 const Books = (props) => {
   const books = props.books
-  const [genre, setGenre] = useState("all genres")
-  const [filteredBooks, setFilteredBooks] = useState(props.books)
+  const [genre, setGenre] = useState(null)
 
+  const { loading, error, data } = useQuery(ALL_BOOKS, {
+    variables: { genre },
+  });
+
+  if (loading) return null;
+  if (error) return `Error! ${error}`;
+  
   if (!props.show) {
     return null
   }
@@ -15,25 +23,13 @@ const Books = (props) => {
   books.forEach(book => book.genres.forEach(g => !combinedGenres.includes(g) ? combinedGenres.push(g) : undefined))
 
   const selectGenre = (g) => {
-    setGenre(g)
-
-    if (g === "all genres") {
-      console.log(books)
-      setFilteredBooks(books)
-      console.log(filteredBooks)
-    }
-    else {
-      const filtered = books.filter(book => { return book.genres.includes(g)
-      })
-      setFilteredBooks(filtered)
-      console.log(genre)
-    }
+    g === "all genres" ? setGenre(null) : setGenre(g) 
   }
+  
 
   return (
     <div>
       <h2>books</h2>
-
       <table>
         <tbody>
           <tr>
@@ -41,7 +37,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((b) => (
+            {data.allBooks.map((b) => (
             <tr key={b.title}>
               <td>{b.title}</td>
               <td>{b.author.name}</td>
@@ -50,7 +46,7 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
-      {combinedGenres.map((g) => (
+        {combinedGenres.map((g) => (
         <Fragment key = {g}>
         <button onClick={() => selectGenre(g)}>{g}</button> 
         </Fragment>

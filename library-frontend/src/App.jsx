@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { gql, useQuery, useApolloClient } from '@apollo/client';
+import { useQuery, useApolloClient } from '@apollo/client';
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm"
+import Recommendations from "./components/Recommendations"
+
 import { ALL_BOOKS, ALL_AUTHORS } from './queries'
 
 const App = () => {
@@ -12,7 +14,6 @@ const App = () => {
   const client = useApolloClient()
   const authorData = useQuery(ALL_AUTHORS)
   const bookData = useQuery(ALL_BOOKS)
- 
 
   if (authorData.loading)  {
     return <div>loading...</div>
@@ -22,15 +23,15 @@ const App = () => {
     return <div>loading...</div>
   }
 
-  console.log(bookData.data.allBooks)
-
   const logout = () => {
+    setPage("authors")
     setToken(null)
     localStorage.clear()
     client.resetStore()
-    setPage("authors")
+
   }
 
+  console.log(token)
   return (
     <div>
       <div>
@@ -38,14 +39,13 @@ const App = () => {
         <button onClick={() => setPage("books")}>books</button>
         {token ? 
             <>
-            <button onClick={() => setPage("add")}>add book</button> 
+            <button onClick={() => setPage("add")}>add a book</button> 
+            <button onClick={() => setPage("recommendations")}>recommendations</button> 
             <button onClick={() => logout()}>log out</button>
             </>
             : 
             <button onClick={() => setPage("login")}>log in</button>
         }
-        {/* <button onClick={() => setPage("add")}>add book</button>
-        <button onClick={() => setPage("login")}>log in</button> */}
    
       </div>
 
@@ -54,6 +54,8 @@ const App = () => {
       <Books show={page === "books"} books={bookData.data.allBooks} />
 
       <NewBook show={page === "add"} />
+      
+      <Recommendations show={page === "recommendations"} books={bookData.data.allBooks}/>
 
       <LoginForm show={page === "login"} setToken={setToken}/>
     </div>
