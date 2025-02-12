@@ -13,10 +13,19 @@ const NewBook = (props) => {
     refetchQueries: [ { query: ALL_AUTHORS } ],
     update: (cache, response) => {
       cache.updateQuery({ query: ALL_BOOKS, variables: {genre: null} }, ({ allBooks }) => {
+        console.log(response.data.addBook)
         return {
           allBooks: allBooks.concat(response.data.addBook),
         }
       })
+      response.data.addBook.genres.forEach(g => {
+        cache.updateQuery({ query: ALL_BOOKS, variables: {genre: g } }, ({ allBooks }) => {
+          return {
+            allBooks: allBooks.concat(response.data.addBook),
+          }
+        })
+      }
+      )
     },
   })
 

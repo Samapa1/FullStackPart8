@@ -8,7 +8,6 @@ const LoginForm = ( { show, setToken }) => {
     const [password, setPassword] = useState('')
 
     const [ login, result ] = useMutation(LOGIN, {
-        // refetchQueries: [  {query: USERDATA} ],
         onError: (error) => {
             console.log(error.graphQLErrors[0].message)
         }

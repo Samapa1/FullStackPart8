@@ -13,13 +13,15 @@ const App = () => {
   const [token, setToken] = useState(null)
   const client = useApolloClient()
   const authorData = useQuery(ALL_AUTHORS)
-  const bookData = useQuery(ALL_BOOKS)
+  const bookData = useQuery(ALL_BOOKS, {
+    variables: { genre: null },
+  })
 
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded
       window.alert(`${addedBook.title} by ${addedBook.author.name} added`)
-      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+      client.cache.updateQuery({ query: ALL_BOOKS, variables: {genre: null} }, ({ allBooks }) => {
         return {
           allBooks: allBooks.concat(addedBook),
         }
