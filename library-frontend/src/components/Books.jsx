@@ -25,6 +25,8 @@ const Books = (props) => {
   const selectGenre = (g) => {
     g === "all genres" ? setGenre(null) : setGenre(g) 
   }
+
+  console.log(data.allBooks)
   
 
   return (
