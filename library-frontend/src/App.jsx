@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useQuery, useApolloClient } from '@apollo/client';
+import { useQuery, useApolloClient, useSubscription } from '@apollo/client';
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm"
 import Recommendations from "./components/Recommendations"
 
-import { ALL_BOOKS, ALL_AUTHORS } from './queries'
+import { ALL_BOOKS, ALL_AUTHORS, BOOK_ADDED } from './queries'
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -14,6 +14,19 @@ const App = () => {
   const client = useApolloClient()
   const authorData = useQuery(ALL_AUTHORS)
   const bookData = useQuery(ALL_BOOKS)
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      const addedBook = data.data.bookAdded
+      window.alert(`${addedBook.title} by ${addedBook.author.name} added`)
+      client.cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(addedBook),
+        }
+      })
+    }
+    
+  })
 
   if (authorData.loading)  {
     return <div>loading...</div>
@@ -23,6 +36,8 @@ const App = () => {
     return <div>loading...</div>
   }
 
+
+
   const logout = () => {
     setPage("authors")
     setToken(null)
@@ -31,7 +46,6 @@ const App = () => {
 
   }
 
-  console.log(token)
   return (
     <div>
       <div>
