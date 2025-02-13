@@ -5,6 +5,7 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from "./components/LoginForm"
 import Recommendations from "./components/Recommendations"
+import { updateCache } from "./helper";
 
 import { ALL_BOOKS, ALL_AUTHORS, BOOK_ADDED } from './queries'
 
@@ -21,11 +22,7 @@ const App = () => {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded
       window.alert(`${addedBook.title} by ${addedBook.author.name} added`)
-      client.cache.updateQuery({ query: ALL_BOOKS, variables: {genre: null} }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(addedBook),
-        }
-      })
+      updateCache(client.cache, { query: ALL_BOOKS, variables: {genre: null}},  addedBook )
     }
     
   })
