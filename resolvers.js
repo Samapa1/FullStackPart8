@@ -45,8 +45,13 @@ const resolvers = {
   
     Author: {
       bookCount: async (root) => {
+        // const author2 = await Author.find( {name: root.name} )
+        // console.log("authorname")
+        // console.log(author2)
+        // const result = await Author.find({name: root.name} ).populate('books') 
+        // console.log(result)
+
         const author2 = await Author.find( {name: root.name} )
-        console.log(author2)
         const result = await Book.find({ author: author2})
         return result.length
       }

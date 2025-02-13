@@ -7,11 +7,15 @@ export const updateCache = (cache, query, addedBook) => {
       })
     }
   
-    cache.updateQuery( query , ({ allBooks }) => {
-      return {
-        allBooks: uniqByName(allBooks.concat(addedBook)),
+    cache.updateQuery( query , (bookCache) => {
+      if (!bookCache) {
+        return null
+      }
+      else {
+        return {
+          allBooks: uniqByName(bookCache.allBooks.concat(addedBook)),
+        }
       }
     })
 }
-
 

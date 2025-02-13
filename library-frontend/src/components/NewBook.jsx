@@ -13,6 +13,7 @@ const NewBook = (props) => {
   const [ createBook ] = useMutation(CREATE_BOOK, {
     refetchQueries: [ { query: ALL_AUTHORS } ],
     update: (cache, response) => {
+
       updateCache(cache, { query: ALL_BOOKS, variables: {genre: null} }, response.data.addBook)
       response.data.addBook.genres.forEach( g => {
         updateCache(cache, { query: ALL_BOOKS, variables: {genre: g} }, response.data.addBook)
