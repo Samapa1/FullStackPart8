@@ -30,7 +30,6 @@ const resolvers = {
         }
         else {
           const books = await Book.find({}).populate({path: "author"})
-          // console.log(JSON.stringify(books))
           return books
         }
         },
@@ -45,14 +44,8 @@ const resolvers = {
   
     Author: {
       bookCount: async (root) => {
-        const author2 = await Author.find( {name: root.name} )
         const result = await Author.find({name: root.name} ).populate('books') 
-        console.log("result")
-        console.log(result[0].books)
         return result[0].books.length
-        // const author2 = await Author.find( {name: root.name} )
-        // const result = await Book.find({ author: author2})
-        // return result.length
       }
     },
   
@@ -72,17 +65,11 @@ const resolvers = {
   
         if (author) {
           const book = new Book( {...args, author: author, id: uuid()} )
-          const book2 = await book.save()
-          console.log(book)
-          console.log("author")
-          console.log(author)
-          console.log(author.books[0])
+          await book.save()
           author.books.push(book)
           await author.save({
             validateModifiedOnly: true,
           })
-          console.log(author.books[0])
-          console.log(author.books[1])
           pubsub.publish('BOOK_ADDED', { bookAdded: book })
           return book
         }
@@ -95,8 +82,6 @@ const resolvers = {
           await newAuthor.save()
           const book = new Book( {...args, author: newAuthor, id: uuid()} )
           const author = await Author.findOne({name: args.author})
-          console.log("author2")
-          console.log(author)
           author.books.push(book)
           await author.save()
           pubsub.publish('BOOK_ADDED', { bookAdded: book })

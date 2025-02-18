@@ -4,7 +4,6 @@ import { USERDATA } from "../queries"
 
 const Recommendations = ( { show, books }) => {
     const userdata = useQuery(USERDATA)
-    console.log(userdata);
     const [ favoriteGenre, setFavoriteGenre ] = useState(null)
 
     useEffect(() => {

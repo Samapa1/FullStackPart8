@@ -11,7 +11,7 @@ import { ALL_BOOKS, ALL_AUTHORS, BOOK_ADDED } from './queries'
 
 const App = () => {
   const [page, setPage] = useState("authors");
-  const [token, setToken] = useState(null)
+  const [token, setToken] = useState(localStorage.getItem('user-token'))
   const client = useApolloClient()
   const authorData = useQuery(ALL_AUTHORS)
   const bookData = useQuery(ALL_BOOKS, {
@@ -34,6 +34,8 @@ const App = () => {
   if (bookData.loading)  {
     return <div>loading...</div>
   }
+
+  console.log(token)
 
 
 

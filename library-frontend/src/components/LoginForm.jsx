@@ -15,7 +15,6 @@ const LoginForm = ( { show, setToken }) => {
 
     useEffect(() => {
         if ( result.data ) {
-          console.log("setting token")
           const token = result.data.login.value
           setToken(token)
           localStorage.setItem('user-token', token)
@@ -27,7 +26,7 @@ const LoginForm = ( { show, setToken }) => {
     const submit = async (event) => {
         event.preventDefault()
         login({  variables: { username, password } })
-        console.log(`submitting ${username} ${password}`)
+        // console.log(`submitting ${username} ${password}`)
 
         setUsername('')
         setPassword('')

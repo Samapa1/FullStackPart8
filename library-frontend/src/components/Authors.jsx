@@ -10,6 +10,8 @@ const Authors = (props) => {
 
   const [ editAuthor ] = useMutation(EDIT_AUTHOR)
 
+  const token =   localStorage.getItem('user-token')
+ 
   if (!props.show) {
     return null
   }
@@ -20,14 +22,12 @@ const Authors = (props) => {
     label: author.name
   }})
 
-  // console.log(options)
   const submit = async (event) => {
     event.preventDefault()
     editAuthor({ variables: { name, born } })
 
     setName('')
     setBorn('')
-    console.log("submitting")
   }
 
   return (
@@ -49,6 +49,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+      {token ? 
       <div>
         <h3>Set birthyear</h3>
         <form onSubmit = {submit}>
@@ -72,6 +73,8 @@ const Authors = (props) => {
             <button type="submit">update author</button>
         </form>
       </div>
+      : undefined
+      }
     </div>
   )
 }
