@@ -35,10 +35,6 @@ const App = () => {
     return <div>loading...</div>
   }
 
-  console.log(token)
-
-
-
   const logout = () => {
     setPage("authors")
     setToken(null)
